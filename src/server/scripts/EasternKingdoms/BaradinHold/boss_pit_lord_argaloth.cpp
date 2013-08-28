@@ -96,11 +96,11 @@ class boss_pit_lord_argaloth : public CreatureScript
                     {
                         case EVENT_METEOR_SLASH:
                             DoCastAOE(SPELL_METEOR_SLASH);
-                            events.ScheduleEvent(EVENT_METEOR_SLASH, urand(15 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
+                            events.ScheduleEvent(EVENT_METEOR_SLASH, urand(15000, 20000));
                             break;
                         case EVENT_CONSUMING_DARKNESS:
                             DoCastAOE(SPELL_CONSUMING_DARKNESS, true);
-                            events.ScheduleEvent(EVENT_CONSUMING_DARKNESS, urand(20 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
+                            events.ScheduleEvent(EVENT_CONSUMING_DARKNESS, urand(20000, 25000));
                             break;
                         case EVENT_BERSERK:
                             DoCast(me, SPELL_BERSERK, true);
