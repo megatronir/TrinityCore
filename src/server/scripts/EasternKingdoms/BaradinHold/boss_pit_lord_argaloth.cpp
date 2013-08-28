@@ -47,15 +47,29 @@ class boss_pit_lord_argaloth : public CreatureScript
 
         struct boss_pit_lord_argalothAI : public BossAI
         {
-            boss_pit_lord_argalothAI(Creature* creature) : BossAI(creature, DATA_ARGALOTH) { }
+            boss_pit_lord_argalothAI(Creature* creature) : BossAI(creature, DATA_ARGALOTH_EVENT)
+            {
+            instance = me->GetInstanceScript();
+            }
+            
+            void Reset()
+            {
+                _Reset();
+                events.Reset();
+                summons.DespawnAll();
+                if (instance)
+                    instance->SetBossState(DATA_ARGALOTH_EVENT, NOT_STARTED);
+            }
 
             void EnterCombat(Unit* /*who*/) OVERRIDE
             {
                 _EnterCombat();
                 instance->SendEncounterUnit(ENCOUNTER_FRAME_ENGAGE, me);
-                events.ScheduleEvent(EVENT_METEOR_SLASH, urand(10 * IN_MILLISECONDS, 20 * IN_MILLISECONDS));
-                events.ScheduleEvent(EVENT_CONSUMING_DARKNESS, urand(20 * IN_MILLISECONDS, 25 * IN_MILLISECONDS));
-                events.ScheduleEvent(EVENT_BERSERK, 5 * MINUTE * IN_MILLISECONDS);
+                events.ScheduleEvent(EVENT_METEOR_SLASH, urand(10000, 20000)); // every 10 /20sec cast mettor slash
+                events.ScheduleEvent(EVENT_CONSUMING_DARKNESS, urand(20000, 25000)); // every 20/25 sec use consuming darkness
+                events.ScheduleEvent(EVENT_BERSERK, 300000); // after 5 minutes use Bersek
+                if (instance)
+                    instance->SetBossState(DATA_ARGALOTH_EVENT, IN_PROGRESS);
             }
 
             void EnterEvadeMode() OVERRIDE
@@ -77,7 +91,8 @@ class boss_pit_lord_argaloth : public CreatureScript
             void JustDied(Unit* /*killer*/) OVERRIDE
             {
                 _JustDied();
-                instance->SendEncounterUnit(ENCOUNTER_FRAME_DISENGAGE, me);
+                if (instance)
+                    instance->SetBossState(DATA_ARGALOTH_EVENT, DONE);
             }
 
             void UpdateAI(uint32 diff) OVERRIDE
