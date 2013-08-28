@@ -143,7 +143,8 @@ public:
 
         void Reset() OVERRIDE
         {
-            _Reset();
+            events.Reset()
+            summons.DespawnAll();
             me->SetWalk(false);
             events.SetPhase(PHASE_INTRO);
             if (instance->GetData(DATA_DEAD_ELEMENTALS) == 4)
