@@ -33,6 +33,11 @@ enum DataTypes
     DATA_ALIZABAL           = 2
 };
 
+enum DataEvents
+{
+    DATA_ARGALOTH_EVENT,
+};
+
 enum CreatureIds
 {
     BOSS_ARGALOTH           = 47120,
